@@ -1,0 +1,111 @@
+
+--Which publisher has sold the most globally
+
+SELECT
+	DISTINCT i.publisher, 
+	SUM(sim.GLOBAL_sales) AS total_global_sales
+FROM 
+	info AS i
+INNER JOIN
+	sales_in_millions AS sim
+ON
+	i.videogame_id=sim.videogame_id
+GROUP BY 
+	publisher
+ORDER BY 
+	total_global_sales;
+
+--Which PLatform sells the most games
+
+SELECT 
+	DISTINCT v.platform,
+	SUM(sim.GLOBAL_sales) AS total_global_sales
+FROM 
+	videogame AS v
+INNER JOIN
+	sales_in_millions AS sim
+ON
+	v.id=sim.videogame_id 
+GROUP BY 
+	platform;
+
+The most profitable games in this data set 
+
+SELECT
+	v.name,
+	sim.GLOBAL_sales
+FROM
+	videogame AS v
+INNER JOIN
+	sales_in_millions AS sim
+ON
+	v.id=sim.videogame_id
+LIMIT 15
+
+--What tyPe of genre generates the most money 
+
+SELECT  
+	i.genre,
+	SUM(sim.GLOBAL_sales) AS global_sales
+FROM 
+	info AS i
+INNER JOIN
+	sales_in_millions AS sim
+ON 
+	i.videogame_id=sim.videogame_id
+GROUP BY
+    genre
+ORDER BY
+    global_sales DESC
+
+--How does NA compare to the rest of thew world and how much does it contribute to global sales
+
+SELECT
+	SUM(NA_sales) AS north_america,
+	SUM(EU_sales) AS europe,
+	SUM(JP_sales) AS japan,
+	SUM(OTHER_sales) AS other,
+	SUM(GLOBAL_sales) AS global
+FROM
+	sales_in_millions
+
+--The most succesful year for video game sales 
+
+SELECT
+	release_year,
+	COUNT(release_year)
+FROM
+	videogame
+GROUP BY
+    release_year;
+
+
+--Whi8ch video game platorm sells the most games
+
+
+SELECT
+	platform,
+	COUNT(platform) AS number_of_games, 
+	release_year
+FROM
+	videogame
+GROUP BY
+    platform
+ORDER BY
+    release_year;
+
+
+--Which publishers stay within a certain generes 
+
+SELECT
+	v.name,
+	i.publisher,
+	i.genre
+FROM 
+	videogame AS v
+INNER JOIN
+	info AS i
+ON
+	v.id = i.videogame_id;
+ORDER BY
+   	publisher;
