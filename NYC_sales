@@ -1,0 +1,143 @@
+
+--Important Info
+
+-- A borough is a number given to the following area Manhattan (1),
+-- Bronx (2), Brooklyn (3), Queens (4), and Staten Island (5). 
+
+
+--Queries
+
+--Elaborate what borough means in this dataset and count each
+
+SELECT 
+	COUNT(borough),
+CASE
+	WHEN borough = 5 THEN "Staten Island"
+	WHEN borough = 4 THEN "Queens"
+	WHEN borough = 3 THEN "Brooklyn"
+	WHEN borough = 2 THEN "Bronx"
+	WHEN borough = 1 THEN "Manhattan"
+END AS Area
+FROM 
+	neighborhood
+ORDER BY borough DESC;
+
+--The most common building class in NY at the time 
+
+SELECT 
+	building_class,
+	address
+FROM
+	neighborhood
+ORDER BY 
+	building_class;
+
+--I want to see how many residential units and how many commercial units are in this data set 
+SELECT 
+	COUNT(residential_units) AS residential_units, 
+	COUNT(commercial_units) AS commerical_units
+FROM
+	info;
+
+--I want to see if there is a corelation between sqft and the year built. One including NULL values and one without 
+
+SELECT 
+	land_square_ft,
+	gross_square_ft,
+	year_built
+FROM
+	info
+ORDER by year_built DESC;
+
+SELECT 
+	land_square_ft,
+	gross_square_ft,
+	year_built
+FROM
+	info
+ORDER by year_built DESC
+WHERE 
+	year_built IS NOT NULL;
+
+--I want to see the prices of all the poperty sales in this dataset
+
+SELECT
+	n.borough,
+	n.address,
+	s.sale_price
+FROM 
+	neighborhood AS n
+INNER JOIN 
+	sales AS s
+ON
+	n.id=s.neighborhood_id
+ORDER BY
+	s.sale_price DESC
+
+--This is query doesn't neccesarly mean that the property didn't sell for nothing but that the owners gave their property ownership to the next of kin 
+
+SELECT
+	n.borough,
+	n.address,
+	s.sale_price
+FROM 
+	neighborhood AS n
+INNER JOIN 
+	sales AS s
+ON
+	n.id=s.neighborhood_id
+WHERE 
+	s.sale_price IS NULL;
+
+--Which Zipcode has the most expensive sales?
+
+SELECT
+	n.zipcode,
+	s.sale_price
+FROM
+	neighborhood AS n
+INNER JOIN 
+	sales as s
+ON
+	n.id=s.neighborhood_id
+ORDER BY
+	s.sale_price DESC
+LIMIT 15;
+
+--What type of building class sells the most 
+
+SELECT 
+	building_class,
+	COUNT(building_class) AS total
+FROM 
+	sales
+GROUP BY 
+    building_class
+
+--When do properties sell the most?
+SELECT 
+	n.neighborhood,
+	n.address,
+	s.sale_date
+FROM
+	neighborhood AS n
+INNER JOIN
+	sales AS s
+ON
+	n.id=s.neighborhood_id
+GROUP BY
+	s.sale_date
+
+--I want to see if a buildings age affects the price 
+
+SELECT 
+	i.year_built,
+	s.sale_price
+FROM
+	info AS i
+INNER JOIN
+	sales AS s
+ON
+	i.neighborhood_id=s.neighborhood_id
+ORDER BY
+	sale_price DESC
