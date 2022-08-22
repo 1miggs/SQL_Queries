@@ -1,0 +1,100 @@
+
+SELECT 
+	*
+FROM
+	airbnb..listings;
+
+--01
+--Acceptance rate per 1 night and the price per day
+
+
+SELECT 
+	name,
+	host_location,
+	property_type,
+	room_type,
+	host_acceptance_rate,
+	(price/minimum_nights)AS price_per_day
+	--description if you would like to see what it has
+FROM
+	airbnb..listings
+WHERE
+	price IS NOT NULL
+AND
+	minimum_nights IS NOT NULL
+AND 
+	host_acceptance_rate IS NOT NULL
+ORDER BY 
+	host_acceptance_rate DESC;
+
+
+
+--02
+--Selecting percentage of availability throught the year
+
+
+SELECT 
+	neighbourhood,
+	(availability_30/365)*100 AS monthly,
+	(availability_60/365)*100 as three_months,
+	(availability_365/365)*100 as yearly,
+	host_listings_count
+	--description if you would like to see what it has
+FROM
+	airbnb..listings
+WHERE
+	 availability_30 IS NOT NULL
+AND
+	availability_60 IS NOT NULL
+AND	
+	availability_365 IS NOT NULL
+AND 
+	neighbourhood IS NOT NULL
+ORDER BY 
+	neighbourhood DESC;
+
+
+
+--03
+--House infor and percentage of bathrooms and beds
+
+SELECT 
+	name,
+	neighbourhood_cleansed AS neighbourhood_cleaned,
+	accommodates,
+	(bedrooms/accommodates)*100 AS bedrooms_percentage_per_person ,
+	(beds/accommodates)*100 AS beds_percentage_per_person,
+	bathrooms_text
+
+FROM
+	airbnb..listings
+
+
+--04
+--Listings with the highest reviews
+
+SELECT 
+	host_id,
+	host_name,
+	number_of_reviews,
+	first_review,
+	last_review,
+	review_scores_rating,
+	review_scores_value
+FROM
+	airbnb..listings
+WHERE
+	first_review IS NOT NULL
+AND
+	last_review IS NOT NULL
+AND
+	review_scores_rating IS NOT NULL
+AND
+	review_scores_value IS NOT NULL
+ORDER BY 
+	5
+
+
+--05
+--New listings and their reviews 
+
