@@ -83,7 +83,27 @@ ORDER BY
 
 --Showing Countries with highest death count per Population
 
+
+
+
 --4
+
+SELECT 
+	location,
+	SUM(Cast(new_deaths as int)) as Totaldeathcount
+FROM
+	covid_info..covid_deaths
+WHERE
+	continent IS NULL
+AND
+	location not in ('World', 'European Union', 'International', 'Upper middle income', 'High income', 'Lower middle income', 'Low income')
+GROUP BY location
+ORDER BY
+	Totaldeathcount DESC
+
+--By continent Death Percentage
+
+--5
 
 
 SELECT 
@@ -102,8 +122,27 @@ ORDER BY
   
  --Showing continets with the highest death count per population
 
+--6
 
---5
+SELECT 
+	location, 
+	population,
+	MAX(total_cases) AS highest_infection_count,   
+	MAX((total_cases/population)*100) AS percent_population_infeceted
+FROM 
+	covid_info..covid_deaths
+--WHERE 
+--	location like '%states%'
+WHERE
+	continent IS NOT NULL
+GROUP BY
+	location,
+	population
+ORDER BY
+	percent_population_infeceted DESC
+
+
+--7
 
 SELECT 
 	date,
@@ -123,7 +162,7 @@ ORDER BY
   
  --Global Numbers
 
---6
+--8
 
 SELECT 
 	dea.continent,
