@@ -72,7 +72,7 @@ FROM
 
 --04
 --Listings with the highest reviews
-
+CREATE VIEW reviews
 SELECT 
 	host_id,
 	host_name,
@@ -93,8 +93,35 @@ AND
 	review_scores_value IS NOT NULL
 ORDER BY 
 	5
-
+SELECT 
+	host_name,
+	review_scores_rating
+FROM
+	reviews
+WHERE 
+	review_scores_rating > 4.5
 
 --05
 --New listings and their reviews 
+
+
+--How many listings are in each nieghborhood
+CREATE VIEW Number_listing AS
+SELECT 
+	name,
+	description,
+	neighbourhood,
+	host_location,
+	COUNT(neighbourhood) OVER (PARTITION BY neighbourhood) AS Total_neighborhood
+FROM
+	airbnb..listings
+WHERE
+	neighbourhood IS NOT NULL
+
+SELECT 
+	*
+FROM
+	Number_listing
+WHERE 
+	Total_neighborhood >10
 
